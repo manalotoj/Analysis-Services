@@ -18,6 +18,6 @@ The functions app can be deployed to Azure using Visual Studio, or, a DevOps too
 ```
 A sample settings file is provided in AsPartitionProcessing.FuncApp/sample.settings.json. To run the function app locally, create a local.settings.json file and provide the pertintent configuration values. Note that the "AsUserName" must be an Azure AD UPN - e.g. someuser@somedomain.onmicrosoft.com.
 
-TODO: 
+## TODO: 
 - Reference credentials from Key Vault
 - Provide a separate Azure function to add/remove Azure Analysis Service firewall entries on-demand. Intent is to invoke the service to add firewall settings using the <em>AsPartitionProcessing.FuncApp</em> outbound IP address(es). The function will automatically remove the same settings after a configurable period of time, or, on-demand.
