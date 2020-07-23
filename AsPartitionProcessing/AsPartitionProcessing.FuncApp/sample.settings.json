@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
+    "ConfigServer": "[replace-with-your-sql-server]database.windows.net",
+    "ConfigDatabase": "[replace-with-your-config-database-name]",
+    "ConfigUserName": "[replace-with-your-config-database-username]",
+    "ConfigPassword": "[replace-with-your-config-database-password]",
+    "AsUserName": "[replace-with-your-analysis-server-username]",
+    "AsPassword": "[replace-with-your-analysis-server-password]"
+  }
+}

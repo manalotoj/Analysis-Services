@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AnalysisServices.Tabular;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace AsPartitionProcessing.SampleClient
 {
@@ -62,7 +63,7 @@ namespace AsPartitionProcessing.SampleClient
                 if (_executionMode == ExecutionMode.InitializeInline)
                 {
                     //Perform Processing
-                    PartitionProcessor.PerformProcessing(InitializeInline(), LogMessage);
+                    PartitionProcessor.PerformProcessing(null, InitializeInline(), LogMessage);
                 }
                 else
                 {
@@ -76,7 +77,7 @@ namespace AsPartitionProcessing.SampleClient
                         {
                             case ExecutionMode.InitializeFromDatabase:
                                 //Perform Processing
-                                PartitionProcessor.PerformProcessing(modelConfig, LogMessage);
+                                PartitionProcessor.PerformProcessing(null, modelConfig, LogMessage);
                                 break;
 
                             case ExecutionMode.MergePartitions:
@@ -281,7 +282,7 @@ namespace AsPartitionProcessing.SampleClient
             }
         }
 
-        private static void LogMessage(string message, MessageType messageType, ModelConfiguration partitionedModel)
+        private static void LogMessage(ILogger log, string message, MessageType messageType, ModelConfiguration partitionedModel)
         {
             //Can provide custom logger here
 
