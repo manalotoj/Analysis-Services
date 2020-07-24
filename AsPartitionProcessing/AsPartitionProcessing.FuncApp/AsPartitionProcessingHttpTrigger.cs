@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -32,19 +34,23 @@ namespace AsPartitionProcessing.FuncApp
 
     private static List<ModelConfiguration> InitializeFromDatabase()
     {
+      AzureServiceTokenProvider azureServiceTokenProvider = new AzureServiceTokenProvider();
+
+      var keyVaultClient = new KeyVaultClient(
+            new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+
       ConfigDatabaseConnectionInfo connectionInfo = new ConfigDatabaseConnectionInfo();
 
       connectionInfo.Server = ConfigurationManager.AppSettings.Get("ConfigServer");
       connectionInfo.Database = ConfigurationManager.AppSettings.Get("ConfigDatabase");
 
-      //TODO: read from Key Vault
-      connectionInfo.UserName = ConfigurationManager.AppSettings.Get("ConfigUserName");
-      connectionInfo.Password = ConfigurationManager.AppSettings.Get("ConfigPassword");
+      connectionInfo.UserName = keyVaultClient.GetSecretAsync(ConfigurationManager.AppSettings.Get("ConfigUserName")).GetAwaiter().GetResult().Value;
+      connectionInfo.Password = keyVaultClient.GetSecretAsync(ConfigurationManager.AppSettings.Get("ConfigPassword")).GetAwaiter().GetResult().Value;
 
 
       var configModels = ConfigDatabaseHelper.ReadConfig(connectionInfo, null);
-      var asUsername = ConfigurationManager.AppSettings.Get("AsUserName");
-      var asPassword = ConfigurationManager.AppSettings.Get("AsPassword");
+      var asUsername = keyVaultClient.GetSecretAsync(ConfigurationManager.AppSettings.Get("AsUserName")).GetAwaiter().GetResult().Value;
+      var asPassword = keyVaultClient.GetSecretAsync(ConfigurationManager.AppSettings.Get("AsPassword")).GetAwaiter().GetResult().Value;
 
       foreach (var configModel in configModels)
       {
